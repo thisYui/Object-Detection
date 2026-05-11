@@ -1,0 +1,22 @@
+# configs/yolov8_config.yaml
+# Configuration file for YOLOv8 training on Traffic Subset
+
+# Dataset paths relative to the project root directory
+path: data/processed
+train: train/images
+val: val/images
+test: test/images
+
+# Number of classes
+nc: 8
+
+# Class names mapping
+names:
+  0: person
+  1: bicycle
+  2: car
+  3: motorcycle
+  4: bus
+  5: truck
+  6: traffic light
+  7: stop sign
