@@ -1,8 +1,8 @@
 # Path to the dataset directory
 path: data/processed
-train: images/train
-val: images/val
-test: images/test
+train: train/images
+val: val/images
+test: test/images
 
 # Number of classes
 nc: 8
