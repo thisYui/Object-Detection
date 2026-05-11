@@ -1,0 +1,11 @@
+# Path to the dataset directory
+path: data/processed
+train: images/train
+val: images/val
+test: images/test
+
+# Number of classes
+nc: 8
+
+# Class names
+names: ['person', 'bicycle', 'car', 'motorcycle', 'bus', 'truck', 'traffic light', 'stop sign']

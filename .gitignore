@@ -30,7 +30,8 @@ env/
 Thumbs.db
 
 # Data (large files)
-data/
+data/raw/
+data/processed/
 
 # LaTeX build artifacts
 report/*.aux
@@ -56,3 +57,5 @@ results/plots
 *.parquet
 
 test.*
+
+GEMINI.md
