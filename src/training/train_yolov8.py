@@ -19,14 +19,14 @@ def train_yolov8(config_path):
     # Execute training with advanced parameters
     results = model.train(
         data=config_path,
-        epochs=150,
+        epochs=50,
         imgsz=640,
         batch=16,
         device=device,
         project='models/yolov8',
         name='train_results',
         exist_ok=True,
-        patience=30,
+        patience=20,
         lr0=0.01,
         lrf=0.1,  
         optimizer='AdamW',
