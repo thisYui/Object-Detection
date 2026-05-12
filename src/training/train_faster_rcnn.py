@@ -43,6 +43,7 @@ class COCOTrafficDataset(CocoDetection):
 
     def __getitem__(self, idx: int):
         img, annotations = super().__getitem__(idx)
+        img = img.convert("RGB")
         image = self.to_tensor(img)
 
         boxes, labels = [], []
@@ -212,7 +213,7 @@ def train_faster_rcnn(config_path: str):
             targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
             loss_dict = model(images, targets)
-            losses    = sum(loss_dict.values())
+            losses = sum(loss.mean() for loss in loss_dict.values())
 
             optimizer.zero_grad()
             losses.backward()
