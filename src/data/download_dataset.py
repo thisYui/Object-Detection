@@ -84,7 +84,8 @@ if __name__ == "__main__":
     traffic_classes = ['person', 'car', 'motorcycle', 'bus', 'truck', 'bicycle', 'traffic light', 'stop sign']
     coco_annotation_path = 'data/raw/annotations/instances_train2017.json'
     input_json = 'data/raw/traffic_subset_train.json'
-    output_images_dir = 'data/processed/images/train'
+    output_images_dir = 'data/processed/train/images'
     
-    extract_traffic_dataset(coco_annotation_path, input_json, traffic_classes, max_images=3000)
+    extract_traffic_dataset(coco_annotation_path, input_json, traffic_classes, max_images=5000)
+
     download_subset_images(input_json, output_images_dir)

@@ -1,0 +1,14 @@
+# configs/faster_rcnn_config.yaml
+dataset:
+  train_images: data/processed/train/images
+  train_annotations: data/processed/annotations/train.json
+  val_images: data/processed/val/images
+  val_annotations: data/processed/annotations/val.json
+
+model:
+  num_classes: 9 
+  batch_size: 4
+  epochs: 20
+  learning_rate: 0.005
+
+save_dir: models/faster_rcnn
