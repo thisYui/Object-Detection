@@ -1,3 +1,5 @@
 pycocotools
 ultralytics
 torchmetrics
+transformers
+timm

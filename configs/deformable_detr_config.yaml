@@ -1,0 +1,17 @@
+# configs/deformable_detr_config.yaml
+dataset:
+  train_images: data/processed/train/images
+  train_annotations: data/processed/annotations/train.json
+  val_images: data/processed/val/images
+  val_annotations: data/processed/annotations/val.json
+
+model:
+  num_classes: 8 
+  batch_size: 2
+  epochs: 50            # Transformer cần nhiều epoch hơn CNN để hội tụ
+  learning_rate: 0.0001 # Learning rate chung cho Transformer
+  lr_backbone: 0.00001  # Learning rate nhỏ hơn 10 lần cho Backbone (ResNet)
+  weight_decay: 0.0001
+  num_workers: 2
+
+save_dir: models/deformable_detr
