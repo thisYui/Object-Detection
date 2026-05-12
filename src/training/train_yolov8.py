@@ -19,30 +19,47 @@ def train_yolov8(config_path):
     # Execute training with advanced parameters
     results = model.train(
         data=config_path,
-        epochs=50,
-        imgsz=416,
+        epochs=150,
+        imgsz=640,
         batch=16,
         device=device,
         project='models/yolov8',
         name='train_results',
         exist_ok=True,
-        patience=10,      # Early stopping mechanism
-        save=True,        # Save weights
-        save_period=5,    # Save checkpoint every 5 epochs
-        val=True,         # Perform validation after each epoch
-        plots=True        # Generate visualization plots
+        patience=30,
+        lr0=0.01,
+        lrf=0.1,  
+        optimizer='AdamW',
+        weight_decay=0.0005,
+        warmup_epochs=3,
+        cos_lr=True,
+
+        # Augmentation
+        hsv_h=0.015,        # color jitter
+        hsv_s=0.7,
+        hsv_v=0.4,
+        fliplr=0.5,         # flip horizontaly (car, human are both valid)
+        mosaic=1.0,         # mosaic augmentation — very effective for YOLO
+        mixup=0.1,          # mixup
+        copy_paste=0.1,     # help classs which has less sample like bicycle, stop sign
+
+        save=True,
+        save_period=10,
+        val=True,
+        plots=True,
+        workers=4,         
     )
 
     # Explicitly load the best weights for final evaluation
-    best_model_path = os.path.join('models/yolov8', 'train_results', 'weights', 'best.pt')
+    best_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
+    print(f"Loading best model from: {best_model_path}")
     best_model = YOLO(best_model_path)
     
-    # Evaluate the best model
     metrics = best_model.val()
     print(f"Validation metrics: {metrics}")
     
     print("Training completed successfully.")
-    print(f"Weights and logs are saved in: {os.path.dirname(best_model_path)}")
+    print(f"All outputs saved to: {results.save_dir}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train YOLOv8 Object Detection Model")
