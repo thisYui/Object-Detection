@@ -5,11 +5,12 @@ dataset:
   val_annotations:    data/processed/annotations/val.json
 
 model:
-  num_classes: 9        # 8 traffic classes + 1 background (class 0)
-  batch_size: 4         # 4–8 recommended for T4 (16 GB); raise to 8 if VRAM allows
-  epochs: 20
-  learning_rate: 0.005  # LR decays ×0.1 at epoch 12 and 17 (60 % / 85 % of total)
-  num_workers: 2
-  val_every: 5          # run validation mAP every N epochs (set to 1 for full tracking)
+  num_classes: 9
+  batch_size: 8          # Tăng gấp đôi (mỗi GPU 4 ảnh) -> tận dụng 2 GPU
+  epochs: 50
+  learning_rate: 0.005   # Giữ nguyên, có thể tăng nhẹ nếu batch tăng gấp đôi
+  num_workers: 4         # Tăng lên 4-8 để tải dữ liệu nhanh hơn
+  val_every: 5
 
+  
 save_dir: models/faster_rcnn

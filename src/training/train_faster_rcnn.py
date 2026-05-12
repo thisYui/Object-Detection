@@ -157,6 +157,7 @@ def train_faster_rcnn(config_path: str):
         shuffle=True,
         num_workers=config["model"].get("num_workers", 2),
         collate_fn=collate_fn,
+        pin_memory=True
     )
     val_loader = DataLoader(
         val_dataset,
@@ -164,11 +165,17 @@ def train_faster_rcnn(config_path: str):
         shuffle=False,
         num_workers=config["model"].get("num_workers", 2),
         collate_fn=collate_fn,
+        pin_memory=True
     )
 
     # ── Model ─────────────────────────────────────────────────────────────────
     num_classes = config["model"]["num_classes"]  # includes background (class 0)
     model = get_model(num_classes)
+
+    if torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs with DataParallel")
+        model = torch.nn.DataParallel(model)
+
     model.to(device)
 
     # ── Optimizer ─────────────────────────────────────────────────────────────
@@ -226,12 +233,13 @@ def train_faster_rcnn(config_path: str):
         print(f"\n── Epoch {epoch+1:>3}/{num_epochs}  avg_loss: {avg_loss:.4f}  lr: {current_lr:.6f}")
 
         # Save last checkpoint every epoch
-        torch.save(model.state_dict(), os.path.join(save_dir, "last.pth"))
+        state_dict = model.module.state_dict() if hasattr(model, 'module') else model.state_dict()
+        torch.save(state_dict, os.path.join(save_dir, "last.pth"))
 
         # Save best checkpoint only when loss improves
         if avg_loss < best_loss:
             best_loss = avg_loss
-            torch.save(model.state_dict(), os.path.join(save_dir, "best.pth"))
+            torch.save(state_dict, os.path.join(save_dir, "best.pth"))
             print(f"   ✓ Best model updated (loss: {best_loss:.4f})")
 
         # Periodic validation
