@@ -159,7 +159,8 @@ def train_faster_rcnn(config_path: str):
         shuffle=True,
         num_workers=config["model"].get("num_workers", 2),
         collate_fn=collate_fn,
-        pin_memory=True
+        pin_memory=True,
+        drop_last=True
     )
     val_loader = DataLoader(
         val_dataset,
