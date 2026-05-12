@@ -18,6 +18,7 @@ except ImportError:
     print("[WARNING] torchmetrics not found. Validation mAP will be skipped.")
     print("          Install with: pip install torchmetrics")
 
+torch.backends.cudnn.benchmark = True
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 1. Dataset
