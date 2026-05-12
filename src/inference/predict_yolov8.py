@@ -72,7 +72,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Test Object Detection with YOLOv8")
     
     # Đường dẫn đến file best.pt mà bạn vừa tải về
-    parser.add_argument('--weights', type=str, default='models/yolov8/yolov8_training_results/train_results/weights/best.pt', help='Đường dẫn tới file trọng số mô hình')
+    parser.add_argument('--weights', type=str, default='models/yolov8/weights/best.pt', help='Đường dẫn tới file trọng số mô hình')
     
     # Đường dẫn đến bức ảnh cần test
     parser.add_argument('--image', type=str, required=True, help='Đường dẫn tới ảnh cần nhận diện')
