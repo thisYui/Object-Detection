@@ -56,7 +56,11 @@ def train_deformable_detr(config_path: str):
     }
     label2id = {v: k for k, v in id2label.items()}
 
-    processor = DeformableDetrImageProcessor.from_pretrained("SenseTime/deformable-detr")
+    processor = DeformableDetrImageProcessor.from_pretrained(
+        "SenseTime/deformable-detr",
+        size={"shortest_edge": 480, "longest_edge": 800},
+        max_size=800
+    )
 
     # --- SETUP TRAIN & VAL DATASETS ---
     train_dataset = COCOTrafficDatasetDETR(config["dataset"]["train_images"], config["dataset"]["train_annotations"])
@@ -101,8 +105,10 @@ def train_deformable_detr(config_path: str):
     num_epochs = config["model"]["epochs"]
     lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
 
+    scaler = torch.amp.GradScaler('cuda')
+
     best_val_loss = float("inf")
-    print(f"\n[Info] Starting training loop for {num_epochs} epochs on 1 GPU...\n")
+    print(f"\n[Info] Starting training loop with AMP (Mixed Precision) for {num_epochs} epochs on 1 GPU...\n")
 
     for epoch in range(num_epochs):
         # ─── TRAINING PHASE ───
@@ -118,9 +124,16 @@ def train_deformable_detr(config_path: str):
             loss = outputs.loss
 
             optimizer.zero_grad()
-            loss.backward()
+
+            with torch.amp.autocast('cuda'):
+                outputs = model(pixel_values=pixel_values, pixel_mask=pixel_mask, labels=labels)
+                loss = outputs.loss
+
+            scaler.scale(loss).backward()
+
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.1)
-            optimizer.step()
+            scaler.step(optimizer)
+            scaler.update()
 
             epoch_train_loss += loss.item()
 
@@ -140,8 +153,9 @@ def train_deformable_detr(config_path: str):
                 pixel_mask = batch["pixel_mask"].to(device)
                 labels = [{k: v.to(device) for k, v in t.items()} for t in batch["labels"]]
                 
-                outputs = model(pixel_values=pixel_values, pixel_mask=pixel_mask, labels=labels)
-                epoch_val_loss += outputs.loss.item()
+                with torch.amp.autocast('cuda'):
+                    outputs = model(pixel_values=pixel_values, pixel_mask=pixel_mask, labels=labels)
+                    epoch_val_loss += outputs.loss.item()
                 
         avg_val_loss = epoch_val_loss / len(val_loader)
 

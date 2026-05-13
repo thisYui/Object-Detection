@@ -1,0 +1,431 @@
+[Info] Training Faster R-CNN on device: cuda
+loading annotations into memory...
+Done (t=1.03s)
+creating index...
+index created!
+[Dataset] 8 categories → label mapping: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8}
+loading annotations into memory...
+Done (t=0.23s)
+creating index...
+index created!
+[Dataset] 8 categories → label mapping: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8}
+Downloading: "https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth" to /root/.cache/torch/hub/checkpoints/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth
+100%|█████████████████████████████████████████| 160M/160M [00:00<00:00, 179MB/s]
+[Info] LR milestones at epochs 12 and 17
+[Info] Starting training for 20 epochs …
+
+  Epoch [1/20]  Step [50/875]  Loss: 0.5453
+  Epoch [1/20]  Step [100/875]  Loss: 0.4392
+  Epoch [1/20]  Step [150/875]  Loss: 0.6936
+  Epoch [1/20]  Step [200/875]  Loss: 0.2683
+  Epoch [1/20]  Step [250/875]  Loss: 0.3706
+  Epoch [1/20]  Step [300/875]  Loss: 0.1369
+  Epoch [1/20]  Step [350/875]  Loss: 0.1476
+  Epoch [1/20]  Step [400/875]  Loss: 0.4214
+  Epoch [1/20]  Step [450/875]  Loss: 0.3318
+  Epoch [1/20]  Step [500/875]  Loss: 0.2955
+  Epoch [1/20]  Step [550/875]  Loss: 0.7124
+  Epoch [1/20]  Step [600/875]  Loss: 0.3510
+  Epoch [1/20]  Step [650/875]  Loss: 0.4931
+  Epoch [1/20]  Step [700/875]  Loss: 0.3429
+  Epoch [1/20]  Step [750/875]  Loss: 0.2119
+  Epoch [1/20]  Step [800/875]  Loss: 0.3600
+  Epoch [1/20]  Step [850/875]  Loss: 0.3481
+
+── Epoch   1/20  avg_loss: 0.4498  lr: 0.005000
+   ✓ Best model updated (loss: 0.4498)
+  Epoch [2/20]  Step [50/875]  Loss: 0.2548
+  Epoch [2/20]  Step [100/875]  Loss: 0.3558
+  Epoch [2/20]  Step [150/875]  Loss: 0.0951
+  Epoch [2/20]  Step [200/875]  Loss: 0.3069
+  Epoch [2/20]  Step [250/875]  Loss: 0.4671
+  Epoch [2/20]  Step [300/875]  Loss: 0.4660
+  Epoch [2/20]  Step [350/875]  Loss: 0.2467
+  Epoch [2/20]  Step [400/875]  Loss: 0.3548
+  Epoch [2/20]  Step [450/875]  Loss: 0.5474
+  Epoch [2/20]  Step [500/875]  Loss: 0.3177
+  Epoch [2/20]  Step [550/875]  Loss: 0.3523
+  Epoch [2/20]  Step [600/875]  Loss: 0.6898
+  Epoch [2/20]  Step [650/875]  Loss: 0.5280
+  Epoch [2/20]  Step [700/875]  Loss: 0.2047
+  Epoch [2/20]  Step [750/875]  Loss: 0.5327
+  Epoch [2/20]  Step [800/875]  Loss: 0.1648
+  Epoch [2/20]  Step [850/875]  Loss: 0.1779
+
+── Epoch   2/20  avg_loss: 0.3567  lr: 0.005000
+   ✓ Best model updated (loss: 0.3567)
+  Epoch [3/20]  Step [50/875]  Loss: 0.2789
+  Epoch [3/20]  Step [100/875]  Loss: 0.3358
+  Epoch [3/20]  Step [150/875]  Loss: 0.4042
+  Epoch [3/20]  Step [200/875]  Loss: 0.3422
+  Epoch [3/20]  Step [250/875]  Loss: 0.0716
+  Epoch [3/20]  Step [300/875]  Loss: 0.1151
+  Epoch [3/20]  Step [350/875]  Loss: 0.3273
+  Epoch [3/20]  Step [400/875]  Loss: 0.1529
+  Epoch [3/20]  Step [450/875]  Loss: 0.1866
+  Epoch [3/20]  Step [500/875]  Loss: 0.2982
+  Epoch [3/20]  Step [550/875]  Loss: 0.1414
+  Epoch [3/20]  Step [600/875]  Loss: 0.4438
+  Epoch [3/20]  Step [650/875]  Loss: 0.5970
+  Epoch [3/20]  Step [700/875]  Loss: 0.1975
+  Epoch [3/20]  Step [750/875]  Loss: 0.2079
+  Epoch [3/20]  Step [800/875]  Loss: 0.2767
+  Epoch [3/20]  Step [850/875]  Loss: 0.4860
+
+── Epoch   3/20  avg_loss: 0.3154  lr: 0.005000
+   ✓ Best model updated (loss: 0.3154)
+  Epoch [4/20]  Step [50/875]  Loss: 0.2069
+  Epoch [4/20]  Step [100/875]  Loss: 0.2821
+  Epoch [4/20]  Step [150/875]  Loss: 0.3307
+  Epoch [4/20]  Step [200/875]  Loss: 0.1971
+  Epoch [4/20]  Step [250/875]  Loss: 0.3142
+  Epoch [4/20]  Step [300/875]  Loss: 0.2047
+  Epoch [4/20]  Step [350/875]  Loss: 0.2013
+  Epoch [4/20]  Step [400/875]  Loss: 0.2542
+  Epoch [4/20]  Step [450/875]  Loss: 0.2972
+  Epoch [4/20]  Step [500/875]  Loss: 0.1993
+  Epoch [4/20]  Step [550/875]  Loss: 0.3847
+  Epoch [4/20]  Step [600/875]  Loss: 0.2549
+  Epoch [4/20]  Step [650/875]  Loss: 0.3281
+  Epoch [4/20]  Step [700/875]  Loss: 0.3286
+  Epoch [4/20]  Step [750/875]  Loss: 0.1129
+  Epoch [4/20]  Step [800/875]  Loss: 0.1208
+  Epoch [4/20]  Step [850/875]  Loss: 0.2352
+
+── Epoch   4/20  avg_loss: 0.2855  lr: 0.005000
+   ✓ Best model updated (loss: 0.2855)
+  Epoch [5/20]  Step [50/875]  Loss: 0.4190
+  Epoch [5/20]  Step [100/875]  Loss: 0.0995
+  Epoch [5/20]  Step [150/875]  Loss: 0.2019
+  Epoch [5/20]  Step [200/875]  Loss: 0.2064
+  Epoch [5/20]  Step [250/875]  Loss: 0.0631
+  Epoch [5/20]  Step [300/875]  Loss: 0.1344
+  Epoch [5/20]  Step [350/875]  Loss: 0.0776
+  Epoch [5/20]  Step [400/875]  Loss: 0.2257
+  Epoch [5/20]  Step [450/875]  Loss: 0.3217
+  Epoch [5/20]  Step [500/875]  Loss: 0.0979
+  Epoch [5/20]  Step [550/875]  Loss: 0.2653
+  Epoch [5/20]  Step [600/875]  Loss: 0.1902
+  Epoch [5/20]  Step [650/875]  Loss: 0.2781
+  Epoch [5/20]  Step [700/875]  Loss: 0.2243
+  Epoch [5/20]  Step [750/875]  Loss: 0.2597
+  Epoch [5/20]  Step [800/875]  Loss: 0.4132
+  Epoch [5/20]  Step [850/875]  Loss: 0.2881
+
+── Epoch   5/20  avg_loss: 0.2653  lr: 0.005000
+   ✓ Best model updated (loss: 0.2653)
+   Running validation …
+   mAP@50: 0.623  |  mAP@50-95: 0.339
+
+  Epoch [6/20]  Step [50/875]  Loss: 0.1289
+  Epoch [6/20]  Step [100/875]  Loss: 0.1346
+  Epoch [6/20]  Step [150/875]  Loss: 0.1057
+  Epoch [6/20]  Step [200/875]  Loss: 0.3340
+  Epoch [6/20]  Step [250/875]  Loss: 0.6156
+  Epoch [6/20]  Step [300/875]  Loss: 0.3272
+  Epoch [6/20]  Step [350/875]  Loss: 0.3005
+  Epoch [6/20]  Step [400/875]  Loss: 0.1899
+  Epoch [6/20]  Step [450/875]  Loss: 0.2234
+  Epoch [6/20]  Step [500/875]  Loss: 0.2781
+  Epoch [6/20]  Step [550/875]  Loss: 0.3256
+  Epoch [6/20]  Step [600/875]  Loss: 0.1447
+  Epoch [6/20]  Step [650/875]  Loss: 0.1923
+  Epoch [6/20]  Step [700/875]  Loss: 0.1717
+  Epoch [6/20]  Step [750/875]  Loss: 0.3649
+  Epoch [6/20]  Step [800/875]  Loss: 0.3348
+  Epoch [6/20]  Step [850/875]  Loss: 0.3886
+
+── Epoch   6/20  avg_loss: 0.2451  lr: 0.005000
+   ✓ Best model updated (loss: 0.2451)
+  Epoch [7/20]  Step [50/875]  Loss: 0.3134
+  Epoch [7/20]  Step [100/875]  Loss: 0.1819
+  Epoch [7/20]  Step [150/875]  Loss: 0.3408
+  Epoch [7/20]  Step [200/875]  Loss: 0.2869
+  Epoch [7/20]  Step [250/875]  Loss: 0.2637
+  Epoch [7/20]  Step [300/875]  Loss: 0.1738
+  Epoch [7/20]  Step [350/875]  Loss: 0.2701
+  Epoch [7/20]  Step [400/875]  Loss: 0.0683
+  Epoch [7/20]  Step [450/875]  Loss: 0.1996
+  Epoch [7/20]  Step [500/875]  Loss: 0.0570
+  Epoch [7/20]  Step [550/875]  Loss: 0.2058
+  Epoch [7/20]  Step [600/875]  Loss: 0.2666
+  Epoch [7/20]  Step [650/875]  Loss: 0.3034
+  Epoch [7/20]  Step [700/875]  Loss: 0.3714
+  Epoch [7/20]  Step [750/875]  Loss: 0.1917
+  Epoch [7/20]  Step [800/875]  Loss: 0.2246
+  Epoch [7/20]  Step [850/875]  Loss: 0.2789
+
+── Epoch   7/20  avg_loss: 0.2354  lr: 0.005000
+   ✓ Best model updated (loss: 0.2354)
+  Epoch [8/20]  Step [50/875]  Loss: 0.3142
+  Epoch [8/20]  Step [100/875]  Loss: 0.3264
+  Epoch [8/20]  Step [150/875]  Loss: 0.1299
+  Epoch [8/20]  Step [200/875]  Loss: 0.2023
+  Epoch [8/20]  Step [250/875]  Loss: 0.1088
+  Epoch [8/20]  Step [300/875]  Loss: 0.1491
+  Epoch [8/20]  Step [350/875]  Loss: 0.2617
+  Epoch [8/20]  Step [400/875]  Loss: 0.3452
+  Epoch [8/20]  Step [450/875]  Loss: 0.3030
+  Epoch [8/20]  Step [500/875]  Loss: 0.1950
+  Epoch [8/20]  Step [550/875]  Loss: 0.1543
+  Epoch [8/20]  Step [600/875]  Loss: 0.2475
+  Epoch [8/20]  Step [650/875]  Loss: 0.2091
+  Epoch [8/20]  Step [700/875]  Loss: 0.4815
+  Epoch [8/20]  Step [750/875]  Loss: 0.1595
+  Epoch [8/20]  Step [800/875]  Loss: 0.3127
+  Epoch [8/20]  Step [850/875]  Loss: 0.1722
+
+── Epoch   8/20  avg_loss: 0.2216  lr: 0.005000
+   ✓ Best model updated (loss: 0.2216)
+  Epoch [9/20]  Step [50/875]  Loss: 0.1041
+  Epoch [9/20]  Step [100/875]  Loss: 0.4229
+  Epoch [9/20]  Step [150/875]  Loss: 0.1507
+  Epoch [9/20]  Step [200/875]  Loss: 0.2248
+  Epoch [9/20]  Step [250/875]  Loss: 0.0610
+  Epoch [9/20]  Step [300/875]  Loss: 0.1002
+  Epoch [9/20]  Step [350/875]  Loss: 0.1715
+  Epoch [9/20]  Step [400/875]  Loss: 0.1051
+  Epoch [9/20]  Step [450/875]  Loss: 0.1429
+  Epoch [9/20]  Step [500/875]  Loss: 0.1150
+  Epoch [9/20]  Step [550/875]  Loss: 0.2784
+  Epoch [9/20]  Step [600/875]  Loss: 0.2226
+  Epoch [9/20]  Step [650/875]  Loss: 0.5543
+  Epoch [9/20]  Step [700/875]  Loss: 0.1344
+  Epoch [9/20]  Step [750/875]  Loss: 0.2430
+  Epoch [9/20]  Step [800/875]  Loss: 0.3135
+  Epoch [9/20]  Step [850/875]  Loss: 0.2715
+
+── Epoch   9/20  avg_loss: 0.2201  lr: 0.005000
+   ✓ Best model updated (loss: 0.2201)
+  Epoch [10/20]  Step [50/875]  Loss: 0.1693
+  Epoch [10/20]  Step [100/875]  Loss: 0.1799
+  Epoch [10/20]  Step [150/875]  Loss: 0.1879
+  Epoch [10/20]  Step [200/875]  Loss: 0.1803
+  Epoch [10/20]  Step [250/875]  Loss: 0.0334
+  Epoch [10/20]  Step [300/875]  Loss: 0.2736
+  Epoch [10/20]  Step [350/875]  Loss: 0.2186
+  Epoch [10/20]  Step [400/875]  Loss: 0.2588
+  Epoch [10/20]  Step [450/875]  Loss: 0.1380
+  Epoch [10/20]  Step [500/875]  Loss: 0.1262
+  Epoch [10/20]  Step [550/875]  Loss: 0.1637
+  Epoch [10/20]  Step [600/875]  Loss: 0.7183
+  Epoch [10/20]  Step [650/875]  Loss: 0.0909
+  Epoch [10/20]  Step [700/875]  Loss: 0.1162
+  Epoch [10/20]  Step [750/875]  Loss: 0.2825
+  Epoch [10/20]  Step [800/875]  Loss: 0.1961
+  Epoch [10/20]  Step [850/875]  Loss: 0.1519
+
+── Epoch  10/20  avg_loss: 0.2061  lr: 0.005000
+   ✓ Best model updated (loss: 0.2061)
+   Running validation …
+   mAP@50: 0.615  |  mAP@50-95: 0.353
+
+  Epoch [11/20]  Step [50/875]  Loss: 0.0703
+  Epoch [11/20]  Step [100/875]  Loss: 0.2294
+  Epoch [11/20]  Step [150/875]  Loss: 0.2119
+  Epoch [11/20]  Step [200/875]  Loss: 0.2424
+  Epoch [11/20]  Step [250/875]  Loss: 0.2457
+  Epoch [11/20]  Step [300/875]  Loss: 0.1837
+  Epoch [11/20]  Step [350/875]  Loss: 0.2772
+  Epoch [11/20]  Step [400/875]  Loss: 0.2176
+  Epoch [11/20]  Step [450/875]  Loss: 0.3031
+  Epoch [11/20]  Step [500/875]  Loss: 0.1986
+  Epoch [11/20]  Step [550/875]  Loss: 0.1747
+  Epoch [11/20]  Step [600/875]  Loss: 0.2956
+  Epoch [11/20]  Step [650/875]  Loss: 0.1011
+  Epoch [11/20]  Step [700/875]  Loss: 0.2456
+  Epoch [11/20]  Step [750/875]  Loss: 0.2713
+  Epoch [11/20]  Step [800/875]  Loss: 0.2747
+  Epoch [11/20]  Step [850/875]  Loss: 0.3292
+
+── Epoch  11/20  avg_loss: 0.1995  lr: 0.005000
+   ✓ Best model updated (loss: 0.1995)
+  Epoch [12/20]  Step [50/875]  Loss: 0.0792
+  Epoch [12/20]  Step [100/875]  Loss: 0.1739
+  Epoch [12/20]  Step [150/875]  Loss: 0.0840
+  Epoch [12/20]  Step [200/875]  Loss: 0.2996
+  Epoch [12/20]  Step [250/875]  Loss: 0.2214
+  Epoch [12/20]  Step [300/875]  Loss: 0.1808
+  Epoch [12/20]  Step [350/875]  Loss: 0.2056
+  Epoch [12/20]  Step [400/875]  Loss: 0.1194
+  Epoch [12/20]  Step [450/875]  Loss: 0.2292
+  Epoch [12/20]  Step [500/875]  Loss: 0.0754
+  Epoch [12/20]  Step [550/875]  Loss: 0.2444
+  Epoch [12/20]  Step [600/875]  Loss: 0.1776
+  Epoch [12/20]  Step [650/875]  Loss: 0.0637
+  Epoch [12/20]  Step [700/875]  Loss: 0.1299
+  Epoch [12/20]  Step [750/875]  Loss: 0.2210
+  Epoch [12/20]  Step [800/875]  Loss: 0.1727
+  Epoch [12/20]  Step [850/875]  Loss: 0.1871
+
+── Epoch  12/20  avg_loss: 0.1939  lr: 0.000500
+   ✓ Best model updated (loss: 0.1939)
+  Epoch [13/20]  Step [50/875]  Loss: 0.0666
+  Epoch [13/20]  Step [100/875]  Loss: 0.1812
+  Epoch [13/20]  Step [150/875]  Loss: 0.2154
+  Epoch [13/20]  Step [200/875]  Loss: 0.1631
+  Epoch [13/20]  Step [250/875]  Loss: 0.1714
+  Epoch [13/20]  Step [300/875]  Loss: 0.2213
+  Epoch [13/20]  Step [350/875]  Loss: 0.1439
+  Epoch [13/20]  Step [400/875]  Loss: 0.1259
+  Epoch [13/20]  Step [450/875]  Loss: 0.3135
+  Epoch [13/20]  Step [500/875]  Loss: 0.1016
+  Epoch [13/20]  Step [550/875]  Loss: 0.1111
+  Epoch [13/20]  Step [600/875]  Loss: 0.0650
+  Epoch [13/20]  Step [650/875]  Loss: 0.1533
+  Epoch [13/20]  Step [700/875]  Loss: 0.1843
+  Epoch [13/20]  Step [750/875]  Loss: 0.0912
+  Epoch [13/20]  Step [800/875]  Loss: 0.0599
+  Epoch [13/20]  Step [850/875]  Loss: 0.0472
+
+── Epoch  13/20  avg_loss: 0.1530  lr: 0.000500
+   ✓ Best model updated (loss: 0.1530)
+  Epoch [14/20]  Step [50/875]  Loss: 0.0692
+  Epoch [14/20]  Step [100/875]  Loss: 0.1137
+  Epoch [14/20]  Step [150/875]  Loss: 0.1315
+  Epoch [14/20]  Step [200/875]  Loss: 0.2189
+  Epoch [14/20]  Step [250/875]  Loss: 0.1014
+  Epoch [14/20]  Step [300/875]  Loss: 0.0471
+  Epoch [14/20]  Step [350/875]  Loss: 0.1017
+  Epoch [14/20]  Step [400/875]  Loss: 0.0721
+  Epoch [14/20]  Step [450/875]  Loss: 0.1549
+  Epoch [14/20]  Step [500/875]  Loss: 0.1140
+  Epoch [14/20]  Step [550/875]  Loss: 0.0881
+  Epoch [14/20]  Step [600/875]  Loss: 0.2104
+  Epoch [14/20]  Step [650/875]  Loss: 0.2404
+  Epoch [14/20]  Step [700/875]  Loss: 0.0664
+  Epoch [14/20]  Step [750/875]  Loss: 0.2118
+  Epoch [14/20]  Step [800/875]  Loss: 0.0917
+  Epoch [14/20]  Step [850/875]  Loss: 0.1683
+
+── Epoch  14/20  avg_loss: 0.1379  lr: 0.000500
+   ✓ Best model updated (loss: 0.1379)
+  Epoch [15/20]  Step [50/875]  Loss: 0.1797
+  Epoch [15/20]  Step [100/875]  Loss: 0.1951
+  Epoch [15/20]  Step [150/875]  Loss: 0.0291
+  Epoch [15/20]  Step [200/875]  Loss: 0.0970
+  Epoch [15/20]  Step [250/875]  Loss: 0.0930
+  Epoch [15/20]  Step [300/875]  Loss: 0.0431
+  Epoch [15/20]  Step [350/875]  Loss: 0.3322
+  Epoch [15/20]  Step [400/875]  Loss: 0.1395
+  Epoch [15/20]  Step [450/875]  Loss: 0.1192
+  Epoch [15/20]  Step [500/875]  Loss: 0.1763
+  Epoch [15/20]  Step [550/875]  Loss: 0.1331
+  Epoch [15/20]  Step [600/875]  Loss: 0.1111
+  Epoch [15/20]  Step [650/875]  Loss: 0.0627
+  Epoch [15/20]  Step [700/875]  Loss: 0.0594
+  Epoch [15/20]  Step [750/875]  Loss: 0.0703
+  Epoch [15/20]  Step [800/875]  Loss: 0.0355
+  Epoch [15/20]  Step [850/875]  Loss: 0.0648
+
+── Epoch  15/20  avg_loss: 0.1298  lr: 0.000500
+   ✓ Best model updated (loss: 0.1298)
+   Running validation …
+   mAP@50: 0.594  |  mAP@50-95: 0.353
+
+  Epoch [16/20]  Step [50/875]  Loss: 0.0587
+  Epoch [16/20]  Step [100/875]  Loss: 0.0817
+  Epoch [16/20]  Step [150/875]  Loss: 0.1652
+  Epoch [16/20]  Step [200/875]  Loss: 0.0233
+  Epoch [16/20]  Step [250/875]  Loss: 0.0504
+  Epoch [16/20]  Step [300/875]  Loss: 0.1940
+  Epoch [16/20]  Step [350/875]  Loss: 0.0998
+  Epoch [16/20]  Step [400/875]  Loss: 0.2005
+  Epoch [16/20]  Step [450/875]  Loss: 0.0675
+  Epoch [16/20]  Step [500/875]  Loss: 0.2271
+  Epoch [16/20]  Step [550/875]  Loss: 0.0800
+  Epoch [16/20]  Step [600/875]  Loss: 0.1231
+  Epoch [16/20]  Step [650/875]  Loss: 0.1999
+  Epoch [16/20]  Step [700/875]  Loss: 0.0946
+  Epoch [16/20]  Step [750/875]  Loss: 0.1288
+  Epoch [16/20]  Step [800/875]  Loss: 0.0715
+  Epoch [16/20]  Step [850/875]  Loss: 0.0343
+
+── Epoch  16/20  avg_loss: 0.1238  lr: 0.000500
+   ✓ Best model updated (loss: 0.1238)
+  Epoch [17/20]  Step [50/875]  Loss: 0.0838
+  Epoch [17/20]  Step [100/875]  Loss: 0.0736
+  Epoch [17/20]  Step [150/875]  Loss: 0.0641
+  Epoch [17/20]  Step [200/875]  Loss: 0.0707
+  Epoch [17/20]  Step [250/875]  Loss: 0.1448
+  Epoch [17/20]  Step [300/875]  Loss: 0.0965
+  Epoch [17/20]  Step [350/875]  Loss: 0.0845
+  Epoch [17/20]  Step [400/875]  Loss: 0.2501
+  Epoch [17/20]  Step [450/875]  Loss: 0.0969
+  Epoch [17/20]  Step [500/875]  Loss: 0.1813
+  Epoch [17/20]  Step [550/875]  Loss: 0.0336
+  Epoch [17/20]  Step [600/875]  Loss: 0.1966
+  Epoch [17/20]  Step [650/875]  Loss: 0.1105
+  Epoch [17/20]  Step [700/875]  Loss: 0.1630
+  Epoch [17/20]  Step [750/875]  Loss: 0.0558
+  Epoch [17/20]  Step [800/875]  Loss: 0.0726
+  Epoch [17/20]  Step [850/875]  Loss: 0.0372
+
+── Epoch  17/20  avg_loss: 0.1197  lr: 0.000050
+   ✓ Best model updated (loss: 0.1197)
+  Epoch [18/20]  Step [50/875]  Loss: 0.1508
+  Epoch [18/20]  Step [100/875]  Loss: 0.0425
+  Epoch [18/20]  Step [150/875]  Loss: 0.2461
+  Epoch [18/20]  Step [200/875]  Loss: 0.1584
+  Epoch [18/20]  Step [250/875]  Loss: 0.0759
+  Epoch [18/20]  Step [300/875]  Loss: 0.0690
+  Epoch [18/20]  Step [350/875]  Loss: 0.1719
+  Epoch [18/20]  Step [400/875]  Loss: 0.1622
+  Epoch [18/20]  Step [450/875]  Loss: 0.0755
+  Epoch [18/20]  Step [500/875]  Loss: 0.1135
+  Epoch [18/20]  Step [550/875]  Loss: 0.0721
+  Epoch [18/20]  Step [600/875]  Loss: 0.0495
+  Epoch [18/20]  Step [650/875]  Loss: 0.0233
+  Epoch [18/20]  Step [700/875]  Loss: 0.3026
+  Epoch [18/20]  Step [750/875]  Loss: 0.1309
+  Epoch [18/20]  Step [800/875]  Loss: 0.1095
+  Epoch [18/20]  Step [850/875]  Loss: 0.0796
+
+── Epoch  18/20  avg_loss: 0.1145  lr: 0.000050
+   ✓ Best model updated (loss: 0.1145)
+  Epoch [19/20]  Step [50/875]  Loss: 0.0888
+  Epoch [19/20]  Step [100/875]  Loss: 0.1616
+  Epoch [19/20]  Step [150/875]  Loss: 0.1202
+  Epoch [19/20]  Step [200/875]  Loss: 0.1311
+  Epoch [19/20]  Step [250/875]  Loss: 0.1088
+  Epoch [19/20]  Step [300/875]  Loss: 0.1054
+  Epoch [19/20]  Step [350/875]  Loss: 0.1202
+  Epoch [19/20]  Step [400/875]  Loss: 0.2320
+  Epoch [19/20]  Step [450/875]  Loss: 0.0330
+  Epoch [19/20]  Step [500/875]  Loss: 0.0465
+  Epoch [19/20]  Step [550/875]  Loss: 0.1005
+  Epoch [19/20]  Step [600/875]  Loss: 0.2302
+  Epoch [19/20]  Step [650/875]  Loss: 0.0742
+  Epoch [19/20]  Step [700/875]  Loss: 0.1486
+  Epoch [19/20]  Step [750/875]  Loss: 0.1863
+  Epoch [19/20]  Step [800/875]  Loss: 0.2047
+  Epoch [19/20]  Step [850/875]  Loss: 0.1787
+
+── Epoch  19/20  avg_loss: 0.1138  lr: 0.000050
+   ✓ Best model updated (loss: 0.1138)
+  Epoch [20/20]  Step [50/875]  Loss: 0.1077
+  Epoch [20/20]  Step [100/875]  Loss: 0.0256
+  Epoch [20/20]  Step [150/875]  Loss: 0.1715
+  Epoch [20/20]  Step [200/875]  Loss: 0.0665
+  Epoch [20/20]  Step [250/875]  Loss: 0.0342
+  Epoch [20/20]  Step [300/875]  Loss: 0.1055
+  Epoch [20/20]  Step [350/875]  Loss: 0.1780
+  Epoch [20/20]  Step [400/875]  Loss: 0.1028
+  Epoch [20/20]  Step [450/875]  Loss: 0.1463
+  Epoch [20/20]  Step [500/875]  Loss: 0.0713
+  Epoch [20/20]  Step [550/875]  Loss: 0.0716
+  Epoch [20/20]  Step [600/875]  Loss: 0.1084
+  Epoch [20/20]  Step [650/875]  Loss: 0.2127
+  Epoch [20/20]  Step [700/875]  Loss: 0.0859
+  Epoch [20/20]  Step [750/875]  Loss: 0.1385
+  Epoch [20/20]  Step [800/875]  Loss: 0.1825
+  Epoch [20/20]  Step [850/875]  Loss: 0.2223
+
+── Epoch  20/20  avg_loss: 0.1132  lr: 0.000050
+   ✓ Best model updated (loss: 0.1132)
+   Running validation …
+   mAP@50: 0.580  |  mAP@50-95: 0.345
+
+
+[Done] Training complete. Weights saved to: models/faster_rcnn
+       Best train loss: 0.1132
