@@ -3,3 +3,4 @@ ultralytics
 torchmetrics
 transformers
 timm
+pandas

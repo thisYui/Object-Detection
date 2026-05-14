@@ -1,0 +1,29 @@
+{
+    "precision_mean": 0.4491760755693168,
+    "recall_mean": 0.3827931041200332,
+    "mAP50": 0.3763536433136381,
+    "mAP50_95": 0.24055497416681462,
+    "f1_mean": 0.41333623519043056,
+    "speed_preprocess_ms_per_image": 0.6583648004258672,
+    "speed_inference_ms_per_image": 38.10570866645624,
+    "speed_loss_ms_per_image": 8.319970220327377e-05,
+    "speed_postprocess_ms_per_image": 0.8311298666521907,
+    "fps_from_ultralytics_inference_time": 26.24278710450232,
+    "weights": "models\\yolov8\\best.pt",
+    "data_yaml": "configs\\dataset.yaml",
+    "split": "test",
+    "imgsz": 640,
+    "batch": 16,
+    "device": "auto",
+    "num_classes": 8,
+    "class_names": [
+        "person",
+        "bicycle",
+        "car",
+        "motorcycle",
+        "bus",
+        "truck",
+        "traffic light",
+        "stop sign"
+    ]
+}
