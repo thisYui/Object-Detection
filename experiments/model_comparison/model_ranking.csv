@@ -1,0 +1,25 @@
+metric,rank,model,value,best_direction
+precision_mean,1,YOLOv8,0.4491760755693168,higher
+precision_mean,2,Faster R-CNN,0.3726721312472851,higher
+precision_mean,3,Deformable DETR,0.0744179693821101,higher
+recall_mean,1,Faster R-CNN,0.471755296349173,higher
+recall_mean,2,YOLOv8,0.3827931041200332,higher
+recall_mean,3,Deformable DETR,0.1822866784623374,higher
+f1_mean,1,Faster R-CNN,0.4164006188620828,higher
+f1_mean,2,YOLOv8,0.4133362351904305,higher
+f1_mean,3,Deformable DETR,0.1056888106271987,higher
+mAP50,1,Faster R-CNN,0.6062151546921308,higher
+mAP50,2,YOLOv8,0.3763536433136381,higher
+mAP50,3,Deformable DETR,0.1603956346648852,higher
+mAP50_95,1,Faster R-CNN,0.3726721312472851,higher
+mAP50_95,2,YOLOv8,0.2405549741668146,higher
+mAP50_95,3,Deformable DETR,0.0744179693821101,higher
+fps,1,YOLOv8,23.805069843192747,higher
+fps,2,Deformable DETR,0.6159414786374219,higher
+fps,3,Faster R-CNN,0.3707116147687656,higher
+avg_ms_per_image,1,YOLOv8,42.0078582666271,lower
+avg_ms_per_image,2,Deformable DETR,1623.530862399765,lower
+avg_ms_per_image,3,Faster R-CNN,2697.514618266704,lower
+model_size_mb,1,YOLOv8,5.944803237915039,lower
+model_size_mb,2,Deformable DETR,155.81418418884277,lower
+model_size_mb,3,Faster R-CNN,158.16843605041504,lower
