@@ -1,2 +1,2 @@
-benchmark_images,total_seconds,avg_seconds_per_image,avg_ms_per_image,fps_end_to_end,note
-100,218.88398599997163,2.188839859999716,2188.8398599997163,0.4568630251461748,End-to-end timing includes image loading and model forward pass.
+benchmark_images,total_seconds,avg_seconds_per_image,avg_ms_per_image,fps,fps_end_to_end,note
+100,187.745261700009,1.87745261700009,1877.45261700009,0.5326366114090602,0.5326366114090602,End-to-end timing includes image loading and model forward pass.

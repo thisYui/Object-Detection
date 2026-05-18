@@ -1,0 +1,2 @@
+benchmark_images,total_seconds,avg_seconds_per_image,avg_ms_per_image,fps,fps_from_forward_time,note
+388,658.1054110000696,1.6961479664950248,1696.1479664950248,0.5895712047259842,0.5895712047259842,Forward-pass timing excludes preprocessing and postprocessing.

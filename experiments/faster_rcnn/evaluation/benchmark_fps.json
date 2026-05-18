@@ -1,8 +1,9 @@
 {
     "benchmark_images": 100,
-    "total_seconds": 218.88398599997163,
-    "avg_seconds_per_image": 2.188839859999716,
-    "avg_ms_per_image": 2188.8398599997163,
-    "fps_end_to_end": 0.4568630251461748,
+    "total_seconds": 187.745261700009,
+    "avg_seconds_per_image": 1.87745261700009,
+    "avg_ms_per_image": 1877.45261700009,
+    "fps": 0.5326366114090602,
+    "fps_end_to_end": 0.5326366114090602,
     "note": "End-to-end timing includes image loading and model forward pass."
 }

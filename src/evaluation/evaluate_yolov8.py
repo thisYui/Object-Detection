@@ -137,6 +137,23 @@ def safe_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def get_model_size_mb(path: str | Path) -> float:
+    """Return model file size in MB. Supports both files and directories."""
+    path = Path(path)
+
+    if path.is_file():
+        return path.stat().st_size / (1024 * 1024)
+
+    if path.is_dir():
+        total_size = 0
+        for file_path in path.rglob("*"):
+            if file_path.is_file():
+                total_size += file_path.stat().st_size
+        return total_size / (1024 * 1024)
+
+    return 0.0
+
+
 def extract_summary_metrics(metrics: Any) -> Dict[str, Any]:
     """Extract common detection metrics from Ultralytics metric object."""
     box = getattr(metrics, "box", None)
@@ -160,7 +177,15 @@ def extract_summary_metrics(metrics: Any) -> Dict[str, Any]:
 
         inference_ms = safe_float(speed.get("inference", 0.0))
         if inference_ms > 0:
-            summary["fps_from_ultralytics_inference_time"] = 1000.0 / inference_ms
+            summary["avg_ms_per_image"] = inference_ms
+            summary["avg_seconds_per_image"] = inference_ms / 1000.0
+            summary["fps"] = 1000.0 / inference_ms
+            # Backward-compatible alias.
+            summary["fps_from_ultralytics_inference_time"] = summary["fps"]
+        else:
+            summary["avg_ms_per_image"] = None
+            summary["avg_seconds_per_image"] = None
+            summary["fps"] = None
 
     return summary
 
@@ -195,14 +220,24 @@ def extract_per_class_metrics(metrics: Any, class_names: List[str]) -> pd.DataFr
     n = max(len(class_names), len(p_values), len(r_values), len(ap50_values), len(map_values))
     rows = []
     for i in range(n):
+        precision = safe_float(p_values[i]) if i < len(p_values) else None
+        recall = safe_float(r_values[i]) if i < len(r_values) else None
+        f1 = (2 * precision * recall / (precision + recall)) if precision is not None and recall is not None and (precision + recall) > 0 else None
+        map50 = safe_float(ap50_values[i]) if i < len(ap50_values) else None
+        map50_95 = safe_float(map_values[i]) if i < len(map_values) else None
+
         rows.append(
             {
                 "class_id": i,
                 "class_name": class_names[i] if i < len(class_names) else f"class_{i}",
-                "precision": safe_float(p_values[i]) if i < len(p_values) else None,
-                "recall": safe_float(r_values[i]) if i < len(r_values) else None,
-                "AP50": safe_float(ap50_values[i]) if i < len(ap50_values) else None,
-                "AP50_95": safe_float(map_values[i]) if i < len(map_values) else None,
+                "precision": precision,
+                "recall": recall,
+                "f1_score": f1,
+                "mAP50": map50,
+                "mAP50_95": map50_95,
+                # Backward-compatible aliases.
+                "AP50": map50,
+                "AP50_95": map50_95,
             }
         )
 
@@ -253,6 +288,7 @@ def benchmark_fps(
         "total_seconds": elapsed,
         "avg_seconds_per_image": avg,
         "avg_ms_per_image": avg * 1000,
+        "fps": fps,
         "fps_end_to_end": fps,
         "note": "End-to-end timing includes model.predict overhead and image loading.",
     }
@@ -340,6 +376,7 @@ def main() -> None:
             "device": args.device or "auto",
             "num_classes": len(class_names),
             "class_names": class_names,
+            "model_size_mb": float(get_model_size_mb(weights_path)),
         }
     )
 
@@ -361,8 +398,8 @@ def main() -> None:
     print(f"  mAP@0.5        : {summary['mAP50']:.4f}")
     print(f"  mAP@0.5:0.95   : {summary['mAP50_95']:.4f}")
 
-    if "fps_from_ultralytics_inference_time" in summary:
-        print(f"  FPS estimate   : {summary['fps_from_ultralytics_inference_time']:.2f}")
+    if summary.get("fps") is not None:
+        print(f"  FPS estimate   : {summary['fps']:.2f}")
 
     print("\n[Saved]")
     print(f"  {summary_json_path}")

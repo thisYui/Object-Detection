@@ -445,6 +445,9 @@ def extract_per_class_metrics(coco_eval: COCOeval, coco_gt: COCO, class_names: L
                 "precision": ap50_95,
                 "recall": recall_value,
                 "f1_score": f1,
+                "mAP50": ap50,
+                "mAP50_95": ap50_95,
+                # Backward-compatible aliases.
                 "AP50": ap50,
                 "AP50_95": ap50_95,
             }
@@ -516,6 +519,7 @@ def benchmark_fps(
         "total_seconds": elapsed,
         "avg_seconds_per_image": avg,
         "avg_ms_per_image": avg * 1000,
+        "fps": fps,
         "fps_end_to_end": fps,
         "note": "End-to-end timing includes image loading and model forward pass.",
     }
@@ -642,6 +646,8 @@ def main() -> None:
         "total_inference_time_seconds": float(total_inference_time),
         "avg_seconds_per_image": float(avg_seconds),
         "avg_ms_per_image": float(avg_seconds * 1000),
+        "fps": float(fps),
+        # Backward-compatible alias.
         "fps_from_forward_time": float(fps),
         "model_size_mb": float(get_file_size_mb(weights_path)),
     }
@@ -713,7 +719,7 @@ def main() -> None:
     print(f"  F1 mean        : {summary['f1_mean']:.4f}")
     print(f"  mAP@0.5        : {summary['mAP50']:.4f}")
     print(f"  mAP@0.5:0.95   : {summary['mAP50_95']:.4f}")
-    print(f"  FPS estimate   : {summary['fps_from_forward_time']:.2f}")
+    print(f"  FPS estimate   : {summary['fps']:.2f}")
 
     print("\n[Saved]")
     print(f"  {summary_json_path}")

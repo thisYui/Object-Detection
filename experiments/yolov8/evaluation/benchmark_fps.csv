@@ -1,2 +1,2 @@
-benchmark_images,total_seconds,avg_seconds_per_image,avg_ms_per_image,fps_end_to_end,note
-100,4.166845600004308,0.041668456000043076,41.66845600004308,23.99896938823378,End-to-end timing includes model.predict overhead and image loading.
+benchmark_images,total_seconds,avg_seconds_per_image,avg_ms_per_image,fps,fps_end_to_end,note
+100,5.195747199992184,0.05195747199992184,51.957471999921836,19.24650991490703,19.24650991490703,End-to-end timing includes model.predict overhead and image loading.

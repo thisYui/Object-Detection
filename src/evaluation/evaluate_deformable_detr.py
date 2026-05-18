@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
+import pandas as pd
 import torch
 import numpy as np
 from PIL import Image
@@ -59,30 +60,21 @@ def load_yaml(path: str) -> Dict[str, Any]:
         return yaml.safe_load(f)
 
 
-def save_json(data: Any, path: str):
-    with open(path, "w", encoding="utf-8") as f:
+def save_json(path: str | Path, data: Any) -> None:
+    """Save JSON with a unified signature: save_json(path, data)."""
+    path = Path(path)
+    with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 
-def save_dict_to_csv(data: Dict[str, Any], path: str):
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["metric", "value"])
-
-        for key, value in data.items():
-            writer.writerow([key, value])
+def save_dict_to_csv(data: Dict[str, Any], path: str | Path) -> None:
+    """Save a metrics dictionary as one CSV row, matching YOLOv8/Faster R-CNN."""
+    pd.DataFrame([data]).drop(columns=["class_names"], errors="ignore").to_csv(path, index=False)
 
 
-def save_rows_to_csv(rows: List[Dict[str, Any]], path: str):
-    if not rows:
-        return
-
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-        writer.writeheader()
-
-        for row in rows:
-            writer.writerow(row)
+def save_rows_to_csv(rows: List[Dict[str, Any]], path: str | Path) -> None:
+    """Save per-class rows with pandas, matching YOLOv8/Faster R-CNN."""
+    pd.DataFrame(rows).to_csv(path, index=False)
 
 
 def get_model_size_mb(weights_path: str) -> float:
@@ -302,10 +294,14 @@ def convert_outputs_to_coco_predictions(
 def summarize_coco_stats(coco_eval: COCOeval) -> Dict[str, float]:
     stats = coco_eval.stats
 
+    precision_mean = float(stats[0])  # COCO AP@[.50:.95], used as the closest precision summary.
+    recall_mean = float(stats[8])     # AR@100, closest summary recall from COCOeval.
+    f1_mean = (2 * precision_mean * recall_mean / (precision_mean + recall_mean)) if (precision_mean + recall_mean) > 0 else 0.0
+
     return {
-        "precision": float("nan"),
-        "recall": float(stats[8]),          # AR@100, closest summary recall from COCOeval
-        "f1_score": float("nan"),
+        "precision_mean": precision_mean,
+        "recall_mean": recall_mean,
+        "f1_mean": f1_mean,
         "mAP50": float(stats[1]),
         "mAP50_95": float(stats[0]),
         "mAP75": float(stats[2]),
@@ -368,14 +364,20 @@ def extract_per_class_metrics(
         ap_50 = float(np.mean(precision_50_valid)) if precision_50_valid.size else float("nan")
         ar_100 = float(np.mean(recall_valid)) if recall_valid.size else float("nan")
 
+        f1 = (2 * ap_50_95 * ar_100 / (ap_50_95 + ar_100)) if (ap_50_95 + ar_100) > 0 else 0.0
+
         rows.append({
             "class_id": category_id,
+            "category_id": category_id,
             "class_name": class_name,
-            "precision": float("nan"),
+            "precision": ap_50_95,
             "recall": ar_100,
-            "f1_score": float("nan"),
+            "f1_score": f1,
             "mAP50": ap_50,
             "mAP50_95": ap_50_95,
+            # Backward-compatible aliases.
+            "AP50": ap_50,
+            "AP50_95": ap_50_95,
         })
 
     return rows
@@ -443,11 +445,14 @@ def benchmark_model(
     fps = total_images / total_time if total_time > 0 else 0.0
 
     return {
-        "benchmark_total_images": int(total_images),
-        "benchmark_total_time_seconds": float(total_time),
-        "benchmark_avg_inference_time_seconds_per_image": float(avg_time),
-        "benchmark_avg_inference_time_ms_per_image": float(avg_time * 1000),
-        "benchmark_fps": float(fps),
+        "benchmark_images": int(total_images),
+        "total_seconds": float(total_time),
+        "avg_seconds_per_image": float(avg_time),
+        "avg_ms_per_image": float(avg_time * 1000),
+        "fps": float(fps),
+        # Backward-compatible aliases.
+        "fps_from_forward_time": float(fps),
+        "note": "Forward-pass timing excludes preprocessing and postprocessing.",
     }
 
 
@@ -552,7 +557,7 @@ def evaluate(args):
             all_predictions.extend(batch_predictions)
 
     predictions_path = output_dir / "deformable_detr_predictions_coco.json"
-    save_json(all_predictions, str(predictions_path))
+    save_json(predictions_path, all_predictions)
 
     avg_inference_time = total_inference_time / max(total_images, 1)
     fps = total_images / total_inference_time if total_inference_time > 0 else 0.0
@@ -561,9 +566,13 @@ def evaluate(args):
     speed_summary = {
         "total_images": int(total_images),
         "total_inference_time_seconds": float(total_inference_time),
+        "avg_seconds_per_image": float(avg_inference_time),
+        "avg_ms_per_image": float(avg_inference_time * 1000),
+        "fps": float(fps),
+        # Backward-compatible aliases.
+        "fps_from_forward_time": float(fps),
         "avg_inference_time_seconds_per_image": float(avg_inference_time),
         "avg_inference_time_ms_per_image": float(avg_inference_time * 1000),
-        "fps": float(fps),
         "model_size_mb": float(model_size_mb),
     }
 
@@ -571,9 +580,9 @@ def evaluate(args):
         print("\n[Warning] No predictions were generated. Metrics will be set to 0.")
 
         metrics_summary = {
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1_score": 0.0,
+            "precision_mean": 0.0,
+            "recall_mean": 0.0,
+            "f1_mean": 0.0,
             "mAP50": 0.0,
             "mAP50_95": 0.0,
             "mAP75": 0.0,
@@ -596,7 +605,7 @@ def evaluate(args):
             "category_id_offset": args.category_id_offset,
         }
 
-        save_json(metrics_summary, str(output_dir / "metrics_summary.json"))
+        save_json(output_dir / "metrics_summary.json", metrics_summary)
         save_dict_to_csv(metrics_summary, str(output_dir / "metrics_summary.csv"))
         save_rows_to_csv([], str(output_dir / "per_class_metrics.csv"))
 
@@ -631,7 +640,7 @@ def evaluate(args):
         "category_id_offset": args.category_id_offset,
     }
 
-    save_json(metrics_summary, str(output_dir / "metrics_summary.json"))
+    save_json(output_dir / "metrics_summary.json", metrics_summary)
     save_dict_to_csv(metrics_summary, str(output_dir / "metrics_summary.csv"))
     save_rows_to_csv(per_class_metrics, str(output_dir / "per_class_metrics.csv"))
 
@@ -643,24 +652,24 @@ def evaluate(args):
             processor=processor,
             dataloader=dataloader,
             device=device,
-            warmup_batches=args.warmup_batches,
-            max_batches=args.benchmark_batches,
+            warmup_batches=args.warmup,
+            max_batches=args.benchmark_count,
         )
 
-        save_json(benchmark_results, str(output_dir / "benchmark_fps.json"))
+        save_json(output_dir / "benchmark_fps.json", benchmark_results)
         save_dict_to_csv(benchmark_results, str(output_dir / "benchmark_fps.csv"))
 
     print("\n[Done] Evaluation finished.")
     print(f"[Info] Results saved to: {output_dir}")
 
     print("\nSummary:")
-    print(f"  Precision       : {metrics_summary['precision']}")
-    print(f"  Recall / AR@100 : {metrics_summary['recall']:.4f}")
-    print(f"  F1-score        : {metrics_summary['f1_score']}")
+    print(f"  Precision mean  : {metrics_summary['precision_mean']:.4f}")
+    print(f"  Recall mean     : {metrics_summary['recall_mean']:.4f}")
+    print(f"  F1 mean         : {metrics_summary['f1_mean']:.4f}")
     print(f"  mAP@0.5         : {metrics_summary['mAP50']:.4f}")
     print(f"  mAP@0.5:0.95    : {metrics_summary['mAP50_95']:.4f}")
     print(f"  FPS             : {metrics_summary['fps']:.2f}")
-    print(f"  Time/Image      : {metrics_summary['avg_inference_time_ms_per_image']:.2f} ms")
+    print(f"  Time/Image      : {metrics_summary['avg_ms_per_image']:.2f} ms")
     print(f"  Model Size      : {metrics_summary['model_size_mb']:.2f} MB")
 
 
@@ -768,17 +777,21 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--warmup",
         "--warmup-batches",
+        dest="warmup",
         type=int,
         default=3,
-        help="Number of warmup batches for benchmark.",
+        help="Number of warmup batches for benchmark. Alias: --warmup-batches.",
     )
 
     parser.add_argument(
+        "--benchmark-count",
         "--benchmark-batches",
+        dest="benchmark_count",
         type=int,
         default=None,
-        help="Maximum number of batches for benchmark. Default: all batches.",
+        help="Maximum number of batches for benchmark. Alias: --benchmark-batches.",
     )
 
     return parser.parse_args()

@@ -457,19 +457,19 @@ Sau khi huấn luyện, cả 3 mô hình được đánh giá trên cùng tập 
 ### 9.1. Evaluate Faster R-CNN
 
 ```bash
-python src/evaluation/evaluate_faster_rcnn.py --weights models/faster_rcnn/best.pth
+python src/evaluation/evaluate_faster_rcnn.py --weights models/faster_rcnn/best.pth --data configs/dataset.yaml --annotations data/processed/annotations/test.json --split test --output-dir experiments/faster_rcnn/evaluation --batch 4 --device cpu --workers 2 --conf 0.001 --category-id-offset -1 --benchmark --benchmark-count 100 --warmup 5
 ```
 
 ### 9.2. Evaluate YOLOv8
 
 ```bash
-python src/evaluation/evaluate_yolov8.py --weights models/yolov8/best.pt
+python src/evaluation/evaluate_yolov8.py --weights models/yolov8/best.pt --data configs/dataset.yaml --split test --output-dir experiments/yolov8/evaluation --imgsz 640 --batch 16 --device cpu --workers 2 --conf 0.001 --iou 0.6 --save-json --plots --benchmark --benchmark-count 100 --warmup 5
 ```
 
 ### 9.3. Evaluate Deformable DETR
 
 ```bash
-python src/evaluation/evaluate_deformable_detr.py --weights models/deformable_detr/best.pth
+python src/evaluation/evaluate_deformable_detr.py --weights models/deformable_detr/best --data configs/dataset.yaml --annotations data/processed/annotations/test.json --split test --output-dir experiments/deformable_detr/evaluation --threshold 0.001 --category-id-offset 0 --batch-size 4 --device cpu --num-workers 2 --benchmark --benchmark-count 100 --warmup 3
 ```
 
 ---

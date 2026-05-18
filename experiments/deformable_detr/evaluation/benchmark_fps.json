@@ -1,0 +1,9 @@
+{
+    "benchmark_images": 388,
+    "total_seconds": 658.1054110000696,
+    "avg_seconds_per_image": 1.6961479664950248,
+    "avg_ms_per_image": 1696.1479664950248,
+    "fps": 0.5895712047259842,
+    "fps_from_forward_time": 0.5895712047259842,
+    "note": "Forward-pass timing excludes preprocessing and postprocessing."
+}

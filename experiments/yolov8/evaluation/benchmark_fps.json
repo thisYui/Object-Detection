@@ -1,8 +1,9 @@
 {
     "benchmark_images": 100,
-    "total_seconds": 4.166845600004308,
-    "avg_seconds_per_image": 0.041668456000043076,
-    "avg_ms_per_image": 41.66845600004308,
-    "fps_end_to_end": 23.99896938823378,
+    "total_seconds": 5.195747199992184,
+    "avg_seconds_per_image": 0.05195747199992184,
+    "avg_ms_per_image": 51.957471999921836,
+    "fps": 19.24650991490703,
+    "fps_end_to_end": 19.24650991490703,
     "note": "End-to-end timing includes model.predict overhead and image loading."
 }
