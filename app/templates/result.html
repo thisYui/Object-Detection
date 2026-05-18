@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set title = "Detection Result" %}
+
+{% block content %}
+  <section class="result-header">
+    <div>
+      <p class="eyebrow">Detection result</p>
+      <h1>{{ detection_count }} objects found</h1>
+    </div>
+    <a class="secondary-action" href="{{ url_for('index') }}">Run another image</a>
+  </section>
+
+  <section class="result-layout">
+    <div class="image-stage">
+      <img src="{{ result_url }}" alt="Detection result for {{ upload_filename }}">
+    </div>
+
+    <aside class="result-panel">
+      <div class="stats-grid">
+        <div>
+          <span class="metric-label">Threshold</span>
+          <strong>{{ "%.2f"|format(threshold) }}</strong>
+        </div>
+        <div>
+          <span class="metric-label">Device</span>
+          <strong>{{ device }}</strong>
+        </div>
+        <div>
+          <span class="metric-label">Time</span>
+          <strong>{{ "%.2f"|format(inference_seconds) }}s</strong>
+        </div>
+      </div>
+
+      <div class="preview-pair">
+        <div>
+          <span class="metric-label">Original</span>
+          <img src="{{ upload_url }}" alt="Uploaded image">
+        </div>
+        <div>
+          <span class="metric-label">Output</span>
+          <img src="{{ result_url }}" alt="Detection output thumbnail">
+        </div>
+      </div>
+
+      <div class="detections">
+        <div class="section-title">
+          <h2>Detections</h2>
+          <details class="class-details compact">
+            <summary>Classes</summary>
+            <ul class="class-list">
+              {% for class_name in class_names %}
+                <li>{{ class_name }}</li>
+              {% endfor %}
+            </ul>
+          </details>
+        </div>
+        {% if detections %}
+          <div class="detection-list">
+            {% for item in detections %}
+              <article class="detection-item">
+                <div>
+                  <strong>{{ item.class_name }}</strong>
+                  <span class="mono">#{{ item.class_id }}</span>
+                </div>
+                <span class="confidence">{{ "%.2f"|format(item.confidence) }}</span>
+                <span class="bbox mono">[{{ item.bbox|join(", ") }}]</span>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty-state">No detections passed the selected threshold.</p>
+        {% endif %}
+      </div>
+    </aside>
+  </section>
+{% endblock %}

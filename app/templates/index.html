@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% set title = "Traffic Object Detection" %}
+
+{% block content %}
+  <section class="workspace upload-workspace">
+    <div class="intro">
+      <p class="eyebrow">Faster R-CNN inference</p>
+      <h1>Detect traffic objects from an image</h1>
+      <p class="summary">Upload a street image and review bounding boxes, labels, and confidence scores in one pass.</p>
+    </div>
+
+    <form class="upload-panel" id="detect-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+      <div class="mode-tabs" role="tablist" aria-label="Image source">
+        <button class="mode-tab is-active" type="button" data-mode="upload">Upload</button>
+        <button class="mode-tab" type="button" data-mode="webcam">Webcam</button>
+      </div>
+
+      <section class="source-pane is-active" data-pane="upload">
+        <label class="dropzone" for="image-input">
+          <input id="image-input" name="image" type="file" accept=".jpg,.jpeg,.png,.bmp,.webp" required>
+          <img class="upload-preview" id="upload-preview" alt="Selected image preview" hidden>
+          <span class="dropzone-title" id="upload-title">Choose Image</span>
+          <span class="dropzone-meta" id="file-name">JPG, PNG, BMP, WEBP</span>
+        </label>
+      </section>
+
+      <section class="source-pane" data-pane="webcam">
+        <div class="camera-stage is-mirrored">
+          <video id="camera-video" autoplay playsinline muted></video>
+          <canvas id="camera-canvas" hidden></canvas>
+          <canvas class="camera-overlay" id="camera-overlay"></canvas>
+          <div class="camera-placeholder" id="camera-placeholder">
+            <span class="dropzone-title">Camera preview</span>
+            <span class="dropzone-meta">Start webcam to capture a frame</span>
+          </div>
+        </div>
+        <div class="camera-actions">
+          <button class="secondary-action" id="start-camera" type="button">Start webcam</button>
+          <button class="secondary-action" id="stop-camera" type="button" disabled>Stop webcam</button>
+          <button class="secondary-action" id="capture-frame" type="button" disabled>Capture frame</button>
+          <button class="secondary-action" id="detect-webcam" type="button" disabled>Stop auto detect</button>
+        </div>
+        <p class="camera-status" id="camera-status">Webcam runs in your browser and sends only the captured frame.</p>
+      </section>
+
+      <div class="controls">
+        <label class="threshold-control" for="threshold">
+          <span>Confidence</span>
+          <strong id="threshold-value">{{ "%.2f"|format(threshold) }}</strong>
+        </label>
+        <input id="threshold" name="threshold" type="range" min="0.05" max="0.95" step="0.05" value="{{ threshold }}">
+      </div>
+
+      <button class="primary-action" type="submit">Detect objects</button>
+    </form>
+
+    <aside class="model-panel">
+      <div>
+        <span class="metric-label">Selected model</span>
+        <strong>{{ model_name }}</strong>
+      </div>
+      <div>
+        <span class="metric-label">Weights</span>
+        <span class="mono">{{ weights_path.name }}</span>
+      </div>
+      <div>
+        <span class="metric-label">Classes</span>
+        <details class="class-details">
+          <summary>8 traffic classes</summary>
+          <ul class="class-list">
+            {% for class_name in class_names %}
+              <li>{{ class_name }}</li>
+            {% endfor %}
+          </ul>
+        </details>
+      </div>
+    </aside>
+  </section>
+{% endblock %}
