@@ -1,131 +1,257 @@
-import os
 import argparse
+import os
+
 import torch
 import torchvision
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-from torchvision import transforms
 from PIL import Image, ImageDraw, ImageFont
+from torchvision import transforms
+from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+
+
+DEFAULT_CLASS_NAMES = [
+    "person",
+    "bicycle",
+    "car",
+    "motorcycle",
+    "bus",
+    "truck",
+    "traffic light",
+    "stop sign",
+]
+
 
 def get_model(num_classes):
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
         weights=None,
-        weights_backbone=None
+        weights_backbone=None,
     )
     in_features = model.roi_heads.box_predictor.cls_score.in_features
-    # Thay thế Classification Head
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
     return model
 
-def predict_and_visualize(model_path, image_path, output_path, threshold):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-    
-    if not os.path.exists(model_path):
-        print(f"Error: Model weights not found at {model_path}")
-        return
 
-    # Khởi tạo Label Mapping (Faster R-CNN dành class 0 cho Background)
-    # Các class giao thông bắt đầu từ 1
-    id2label = {
-        1: 'person', 2: 'bicycle', 3: 'car', 4: 'motorcycle',
-        5: 'bus', 6: 'truck', 7: 'traffic light', 8: 'stop sign'
-    }
-    num_classes = len(id2label) + 1  # 8 class + 1 background = 9
+def build_id2label(class_names=None):
+    """
+    Faster R-CNN reserves label 0 for background, so object classes start at 1.
+    """
+    names = class_names or DEFAULT_CLASS_NAMES
+    return {idx + 1: name for idx, name in enumerate(names)}
 
-    # Nạp mô hình và trọng số
-    print(f"Loading Faster R-CNN model from: {model_path}")
+
+def load_faster_rcnn_model(weights_path, device=None, class_names=None):
+    """
+    Load a Faster R-CNN model from a .pth state_dict checkpoint.
+
+    Returns:
+        tuple: (model, id2label, device)
+    """
+    device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    if not os.path.exists(weights_path):
+        raise FileNotFoundError(f"Model weights not found: {weights_path}")
+
+    id2label = build_id2label(class_names)
+    num_classes = len(id2label) + 1
+
     model = get_model(num_classes)
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    state_dict = torch.load(weights_path, map_location=device)
+    model.load_state_dict(state_dict)
     model.to(device)
     model.eval()
 
-    # Tải và xử lý ảnh đầu vào
+    return model, id2label, device
+
+
+def load_image(image_path):
     if not os.path.exists(image_path):
-        print(f"Error: Input image not found at {image_path}")
-        return
+        raise FileNotFoundError(f"Input image not found: {image_path}")
 
     try:
-        # Bắt buộc ép kiểu RGB để tránh lỗi kênh màu
-        original_image = Image.open(image_path).convert("RGB")
-    except Exception as e:
-        print(f"Failed to load image. Error: {e}")
-        return
+        return Image.open(image_path).convert("RGB")
+    except Exception as exc:
+        raise ValueError(f"Failed to load image: {image_path}") from exc
 
-    # Chuyển đổi ảnh thành Tensor [C, H, W] chuẩn bị cho PyTorch
+
+def run_faster_rcnn_prediction(model, image, device):
     transform = transforms.Compose([transforms.ToTensor()])
-    image_tensor = transform(original_image).to(device)
+    image_tensor = transform(image).to(device)
 
-
-    # Suy luận (Inference)
     with torch.no_grad():
-        # Torchvision Faster R-CNN tự động áp dụng NMS (Non-Maximum Suppression) trong chế độ eval()
-        prediction = model([image_tensor])[0]
+        return model([image_tensor])[0]
 
-    # Khởi tạo công cụ vẽ
-    draw = ImageDraw.Draw(original_image)
-    try:
-        font = ImageFont.truetype("arial.ttf", 15)
-    except IOError:
-        font = ImageFont.load_default()
 
-    boxes = prediction['boxes'].cpu().numpy()
-    scores = prediction['scores'].cpu().numpy()
-    labels = prediction['labels'].cpu().numpy()
+def filter_predictions(prediction, id2label, threshold):
+    boxes = prediction["boxes"].detach().cpu().tolist()
+    scores = prediction["scores"].detach().cpu().tolist()
+    labels = prediction["labels"].detach().cpu().tolist()
 
-    print(f"Found {len(boxes)} raw predictions. Filtering with threshold >= {threshold}...")
-
-    # Vẽ kết quả thỏa mãn ngưỡng độ tin cậy
+    detections = []
     for box, score, label in zip(boxes, scores, labels):
-        if score >= threshold:
-            box = [round(i, 2) for i in box]
-            score_val = round(score, 2)
-            label_name = id2label.get(label, f"Unknown_{label}")
+        if score < threshold:
+            continue
 
-            print(f"Detected: {label_name} | Confidence: {score_val} | Box: {box}")
+        class_id = int(label)
+        detections.append(
+            {
+                "class_id": class_id,
+                "class_name": id2label.get(class_id, f"Unknown_{class_id}"),
+                "confidence": round(float(score), 4),
+                "bbox": [round(float(value), 2) for value in box],
+            }
+        )
 
-            # Vẽ khung chữ nhật (đổi màu xanh lá để phân biệt với DETR màu đỏ)
-            draw.rectangle(box, outline="green", width=3)
-            
-            # Vẽ nền text và chữ
-            text = f"{label_name}: {score_val}"
-            text_bbox = draw.textbbox((box[0], box[1]), text, font=font)
-            draw.rectangle([text_bbox[0], text_bbox[1], text_bbox[2], text_bbox[3]], fill="green")
-            draw.text((box[0], box[1]), text, fill="white", font=font)
+    return detections
 
-    # Lưu ảnh kết quả
-    output_dir = os.path.dirname(output_path)
-    if output_dir:
-        os.makedirs(output_dir, exist_ok=True)
-        
-    original_image.save(output_path)
-    print(f"Prediction successfully saved to: {output_path}")
 
-if __name__ == "__main__":
+def get_font(font_size=15):
+    try:
+        return ImageFont.truetype("arial.ttf", font_size)
+    except IOError:
+        return ImageFont.load_default()
+
+
+def draw_detections(image, detections, color="green"):
+    output_image = image.copy()
+    draw = ImageDraw.Draw(output_image)
+    font = get_font()
+
+    for detection in detections:
+        box = detection["bbox"]
+        label = f"{detection['class_name']}: {detection['confidence']:.2f}"
+
+        draw.rectangle(box, outline=color, width=3)
+        text_bbox = draw.textbbox((box[0], box[1]), label, font=font)
+        draw.rectangle(text_bbox, fill=color)
+        draw.text((box[0], box[1]), label, fill="white", font=font)
+
+    return output_image
+
+
+def predict_faster_rcnn(
+    image_path,
+    weights_path="models/faster_rcnn/best.pth",
+    output_path="experiments/faster_rcnn/sample_predictions/faster_rcnn_result.jpg",
+    threshold=0.5,
+    device=None,
+    class_names=None,
+    save_image=True,
+):
+    """
+    Run Faster R-CNN inference on one image and optionally save a visualization.
+
+    Args:
+        image_path (str): Input image path.
+        weights_path (str): Path to Faster R-CNN .pth weights.
+        output_path (str): Path to save the rendered result image.
+        threshold (float): Minimum confidence score.
+        device: Optional torch.device or device string.
+        class_names (list[str] | None): Object class names without background.
+        save_image (bool): Save rendered output image when True.
+
+    Returns:
+        dict: Inference result with output path and detections.
+    """
+    if device is not None:
+        device = torch.device(device)
+
+    model, id2label, device = load_faster_rcnn_model(weights_path, device, class_names)
+    image = load_image(image_path)
+    prediction = run_faster_rcnn_prediction(model, image, device)
+    detections = filter_predictions(prediction, id2label, threshold)
+
+    saved_output_path = None
+    if save_image:
+        output_image = draw_detections(image, detections)
+        output_dir = os.path.dirname(output_path)
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+        output_image.save(output_path)
+        saved_output_path = output_path
+
+    return {
+        "image_path": image_path,
+        "weights_path": weights_path,
+        "output_path": saved_output_path,
+        "threshold": threshold,
+        "device": str(device),
+        "detections": detections,
+    }
+
+
+def predict_and_visualize(model_path, image_path, output_path, threshold):
+    """
+    Backward-compatible wrapper for the old function name.
+    """
+    return predict_faster_rcnn(
+        image_path=image_path,
+        weights_path=model_path,
+        output_path=output_path,
+        threshold=threshold,
+    )
+
+
+def parse_args():
     parser = argparse.ArgumentParser(description="Inference script for Faster R-CNN")
     parser.add_argument(
-        "--model_path", 
-        type=str, 
-        default="models/faster_rcnn/best.pth", 
-        help="Path to the saved best.pth weights file"
+        "--weights",
+        "--model_path",
+        dest="weights_path",
+        type=str,
+        default="models/faster_rcnn/best.pth",
+        help="Path to the saved best.pth weights file",
     )
     parser.add_argument(
-        "--image_path", 
-        type=str, 
-        required=True, 
-        help="Path to the input image"
+        "--image",
+        "--image_path",
+        dest="image_path",
+        type=str,
+        required=True,
+        help="Path to the input image",
     )
     parser.add_argument(
-        "--output_path", 
-        type=str, 
-        default="data/predictions/faster_rcnn_result.jpg", 
-        help="Path to save the output image"
+        "--output",
+        "--output_path",
+        dest="output_path",
+        type=str,
+        default="experiments/faster_rcnn/sample_predictions/faster_rcnn_result.jpg",
+        help="Path to save the output image",
     )
     parser.add_argument(
-        "--threshold", 
-        type=float, 
-        default=0.5, 
-        help="Confidence threshold for filtering predictions"
+        "--threshold",
+        type=float,
+        default=0.5,
+        help="Confidence threshold for filtering predictions",
     )
-    
-    args = parser.parse_args()
-    predict_and_visualize(args.model_path, args.image_path, args.output_path, args.threshold)
+    parser.add_argument(
+        "--device",
+        type=str,
+        default=None,
+        help="Device to run inference on, for example cpu, cuda, or cuda:0",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    result = predict_faster_rcnn(
+        image_path=args.image_path,
+        weights_path=args.weights_path,
+        output_path=args.output_path,
+        threshold=args.threshold,
+        device=args.device,
+    )
+
+    print(f"Using device: {result['device']}")
+    print(f"Found {len(result['detections'])} detections with threshold >= {args.threshold}")
+    for detection in result["detections"]:
+        print(
+            "Detected: "
+            f"{detection['class_name']} | "
+            f"Confidence: {detection['confidence']:.2f} | "
+            f"Box: {detection['bbox']}"
+        )
+    print(f"Prediction saved to: {result['output_path']}")
+
+
+if __name__ == "__main__":
+    main()

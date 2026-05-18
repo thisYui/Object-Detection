@@ -4,3 +4,9 @@ torchmetrics
 transformers
 timm
 pandas
+flask
+opencv-python
+pillow
+pyyaml
+torch
+torchvision
