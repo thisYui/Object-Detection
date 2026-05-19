@@ -1,2 +1,0 @@
-precision_mean,recall_mean,mAP50,mAP50_95,f1_mean,speed_preprocess_ms_per_image,speed_inference_ms_per_image,speed_loss_ms_per_image,speed_postprocess_ms_per_image,fps_from_ultralytics_inference_time,weights,data_yaml,split,imgsz,batch,device,num_classes
-0.4491760755693168,0.3827931041200332,0.3763536433136381,0.24055497416681462,0.41333623519043056,0.6583648004258672,38.10570866645624,8.319970220327377e-05,0.8311298666521907,26.24278710450232,models\yolov8\best.pt,configs\dataset.yaml,test,640,16,auto,8
